@@ -6,7 +6,6 @@ package com.github.stefanofornari.braincells;
 public class Brain {
     
     public final BrainCell[] cells;
-    public final int resistance;
     
     /**
      * Create a Brain with the given number of cells and default resistance
@@ -21,7 +20,6 @@ public class Brain {
         for (int i=0; i<size; ++i) {
             cells[i] = new BrainCell();
         }
-        this.resistance = resistance;
     }
     
     public Brain activate(int... positions) {
@@ -32,13 +30,25 @@ public class Brain {
         return this;
     }
     
-    public Brain connect(int a, int b) {
-        cells[a].connections.add(cells[b]);
-        cells[b].connections.add(cells[a]);
+    public Brain promoter(int a, int b) {
+        cells[a].promoters.add(cells[b]);
+        cells[b].promoters.add(cells[a]);
         
         return this;
     }
     
+    public Brain detractor(int a, int b) {
+        cells[a].detractors.add(cells[b]);
+        cells[b].detractors.add(cells[a]);
+        
+        return this;
+    }
+    
+    /**
+     * De-activate all cells keeping all connections.
+     * 
+     * @return this brain
+     */
     public Brain rest() {
         for(BrainCell c: cells) {
             c.active = false;
@@ -56,15 +66,24 @@ public class Brain {
         while (again) {
             again = false;
             for(BrainCell cell: cells) {
-                int count = 0;
-                for(BrainCell pair: cell.connections) {
+                int potential = 0;
+                for(BrainCell pair: cell.promoters) {
                     if (pair.active) {
-                        ++count;
+                        ++potential;
                     }
-                    if ((cell.active == false) && (count >= resistance)) {
-                        again = cell.active = true;
-                        break;
+                }
+                for (BrainCell pair: cell.detractors) {
+                    if (pair.active) {
+                        --potential;
                     }
+                }
+                if ((potential > 0) && (!cell.active)) {
+                    cell.active = true;
+                    again = true;
+                }
+                if ((potential < 0) && cell.active) {
+                    cell.active = false;
+                    again = true;
                 }
             }
         }

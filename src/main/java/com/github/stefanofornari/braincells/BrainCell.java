@@ -7,7 +7,8 @@ import java.util.Set;
  *
  */
 public class BrainCell {
-    public final Set<BrainCell> connections = new HashSet<>();
+    public final Set<BrainCell> promoters = new HashSet<>();
+    public final Set<BrainCell> detractors = new HashSet<>();
     
     public boolean active = false;
 
