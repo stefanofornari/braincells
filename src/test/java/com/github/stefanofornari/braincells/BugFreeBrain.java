@@ -11,7 +11,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- *
+ * A brain is a set of BrainCells that may or may not be connected. A cell can
+ * be active or not active and can be connected to one or more other cells. 
+ * Given two connected cells A and B, the connection is defined promoting when
+ * the activation of A promotes the activation of B (and vice versa - a 
+ * connection is symmetric); when the activation of A inhibit the action of B, 
+ * the connection is called detracting. A cell activates if and only if the
+ * number of cells connected through promoting connections is greater than
+ * the number of cells connected through detracting connections (in other words
+ * if the number of active promoters is higher than the number of active 
+ * detractors).
+ * 
+ * A brain has input and output cells. Input cells are directly activated 
  */
 public class BugFreeBrain {
     
